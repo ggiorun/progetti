@@ -26,6 +26,7 @@ function stampa() {
         }
     }
 
+
     let materie = [];
     let selected = document.getElementById("materie").selectedOptions;
 
@@ -35,9 +36,18 @@ function stampa() {
     }
 
 
-    if (materie.length > 3) {
-        alert("Puoi selezionare al massimo 3 materie.");
-        return;
+    let mezziPosseduti;
+    if (mezzi.length > 0) {
+        mezziPosseduti = mezzi.join(", ");
+    } else {
+        mezziPosseduti = "Nessuno";
+    }
+
+    let materiePreferite;
+    if (materie.length > 0) {
+        materiePreferite = materie.join(", ");
+    } else {
+        materiePreferite = "Nessuna";
     }
 
     let generazione = "";
@@ -66,28 +76,15 @@ function stampa() {
         sesso: sesso,
         provincia: provincia,
         generazione: generazione,
-        mezzi: mezzi,
-        materie: materie,
+        mezziPosseduti: mezziPosseduti,
+        materiePreferite: materiePreferite,
+
         indirizzo: {
             via: indirizzo,
             citta: citta,
             cap: cap
         }
     };
-
-    let mezziPosseduti;
-    if (persona.mezzi.length > 0) {
-        mezziPosseduti = persona.mezzi.join(", ");
-    } else {
-        mezziPosseduti = "Nessuno";
-    }
-
-    let materiePreferite;
-    if (persona.materie.length > 0) {
-        materiePreferite = persona.materie.join(", ");
-    } else {
-        materiePreferite = "Nessuna";
-    }
 
     document.getElementById("output").innerHTML = `
       <h2>Dati Inseriti</h2>
@@ -100,8 +97,9 @@ function stampa() {
       <p><strong>Data di nascita:</strong> ${persona.dataNascita || "Non indicata"}</p>
       <p><strong>Sesso:</strong> ${persona.sesso}</p>
       <p><strong>Provincia:</strong> ${persona.provincia}</p>
-      <p><strong>Mezzi posseduti:</strong> ${mezziPosseduti}</p>
-      <p><strong>Materie preferite:</strong> ${materiePreferite}</p>
+      <p><strong>Mezzi posseduti:</strong> ${persona.mezziPosseduti}</p>
+      <p><strong>Materie preferite:</strong> ${persona.materiePreferite}</p>
       <p><strong>Generazione:</strong> ${persona.generazione}</p>
     `;
 }
+
