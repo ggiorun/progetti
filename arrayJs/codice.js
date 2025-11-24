@@ -15,8 +15,8 @@ function generaNumeri() {
   const arr = [];
   const arr1 = [];
   let somma = 0;
-  let max = -Infinity;
-  let min = Infinity;
+  let max = 0;
+  let min =0;
   let n = 0;
 
   for (let i = 0; i < 100; i++) {
@@ -53,5 +53,6 @@ function generaNumeri() {
   }
   document.getElementById("griglia").innerHTML = grigliaHTML;
 }
+
 
 
