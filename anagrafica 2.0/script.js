@@ -51,19 +51,19 @@ function stampa() {
         generazione = "Boh!";
     }
 
-    document.getElementById("output").innerHTML = `
-      <h2>Dati Inseriti</h2>
-      <p><strong>Nome:</strong> ${nome}</p>
-      <p><strong>Cognome:</strong> ${cognome}</p>
-      <p><strong>Indirizzo:</strong> ${indirizzo}</p>
-      <p><strong>Città:</strong> ${citta}</p>
-      <p><strong>CAP:</strong> ${cap}</p>
-      <p><strong>Età:</strong> ${eta || "Non specificata"}</p>
-      <p><strong>Data di nascita:</strong> ${dataNascita || "Non indicata"}</p>
-      <p><strong>Sesso:</strong> ${sesso}</p>
-      <p><strong>Provincia:</strong> ${provincia}</p>
-      <p><strong>Mezzi posseduti:</strong> ${mezzi.length > 0 ? mezzi.join(", ") : "Nessuno"}</p>
-      <p><strong>Materie preferite:</strong> ${materie.length > 0 ? materie.join(", ") : "Nessuna"}</p>
-      <p><strong>Generazione:</strong> ${generazione}</p>
-    `;
+  document.getElementById("output").innerHTML = 
+      "<h2>Dati Inseriti</h2>" +
+      "<p><strong>Nome:</strong> " + nome + "</p>" +
+      "<p><strong>Cognome:</strong> " + cognome + "</p>" +
+      "<p><strong>Indirizzo:</strong> " + indirizzo + "</p>" +
+      "<p><strong>Città:</strong> " + citta + "</p>" +
+      "<p><strong>CAP:</strong> " + cap + "</p>" +
+      "<p><strong>Età:</strong> " + (eta || "Non specificata") + "</p>" +
+      "<p><strong>Data di nascita:</strong> " + (dataNascita || "Non indicata") + "</p>" +
+      "<p><strong>Sesso:</strong> " + sesso + "</p>" +
+      "<p><strong>Provincia:</strong> " + provincia + "</p>" +
+      "<p><strong>Mezzi posseduti:</strong> " + (mezzi.length > 0 ? mezzi.join(", ") : "Nessuno") + "</p>" +
+      "<p><strong>Materie preferite:</strong> " + (materie.length > 0 ? materie.join(", ") : "Nessuna") + "</p>" +
+      "<p><strong>Generazione:</strong> " + generazione + "</p>";
+
   };
