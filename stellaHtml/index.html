@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stella</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="500" style ="border:1px solid •#d3d3d3;">
+Il tuo browser non
+supporta il canvas
+    </canvas>
+    <script>
+        var canvas=document.getElementById("myCanvas");
+        var ctx= canvas.getContext("2d")
+        ctx.beginPath();
+        ctx.arc(250,250, 200,0,2*Math.PI);
+        ctx.fillStyle="#ADD8E6";
+        ctx.fill();
+        ctx.strokeStyle-"#00008B";
+        ctx.stroke ();
+        ctx.beginPath();
+        ctx.moveTo(250,50);
+        ctx.lineTo(400, 383);
+        ctx.lineTo(60,190);
+        ctx.lineTo(440, 190);
+        ctx.lineTo(100, 383); 
+        ctx.lineTo(250,50);
+        ctx. fillStyle= "#FFD700";
+        ctx.fill();
+        ctx.strokeStyle= "#FF4500";
+        ctx.stroke();
+    </script>
+</body>
+</html>
