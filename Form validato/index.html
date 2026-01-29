@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validazione Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <form method="post" action="#" name="invio">
+        <h2>Registrazione</h2>
+
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id="nome">
+
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" id="telefono">
+
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <small class="info-text">
+            Richiesti: 1° lettera Maiuscola e un simbolo (@ # ? $ - _)
+        </small>
+
+        <label for="conferma">Conferma password</label>
+        <input type="password" name="conferma" id="conferma">
+
+        <br>
+        <input type="button" value="Invia" onClick="valida()">
+    </form>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
