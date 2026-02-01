@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Esempio di creazione dinamica di una tabella con oggetti complessi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            color: #4a148c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #6200ea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <h2><b>Tabella Dinamica - Dati Ricevuti</b></h2>
+
+    <table id="tabella1" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Città</th>
+                <th>Età</th>
+                <th>Gen.</th>
+                <th>Mezzi</th>
+            </tr>
+        </thead>
+        <tbody id="corpoTabella">
+        </tbody>
+    </table>
+
+    <script>
+        s = "";
+        var url = document.location.search.substring(0);
+        //chiedo al prof se l'url devo mandarlo in output con l'alert o no
+        alert(url);
+
+        var persone = JSON.parse(localStorage.getItem('personeTransmission'));
+        var params = url.split("&");
+
+        // (righe)
+        var righe = persone.length;
+        // c = numero di dati (colonne: ID, Nome, Cognome, Città, Età, Generazione, Mezzi)
+        var colonne = 7;
+
+        for (i = 0; i < righe; i++) {
+            s = s + "<tr>";
+
+            // Recupero l'ID dal URL usando split e substr
+            var p = params[i];
+            var id = "";
+            if (i == 0) {
+                id = p.substr(4); // Rimuove "?id="
+            } else {
+                id = p.substr(3); // Rimuove "id="
+            }
+
+            // Ciclo per le colonne
+            for (j = 1; j <= colonne; j++) {
+                var dato = "";
+                if (j == 1) dato = id;
+                if (j == 2) dato = persone[i].nome;
+                if (j == 3) dato = persone[i].cognome;
+                if (j == 4) dato = persone[i].indirizzo.citta;
+                if (j == 5) dato = persone[i].eta;
+                if (j == 6) dato = persone[i].generazione;
+                if (j == 7) dato = persone[i].mezziPosseduti;
+
+                s = s + "<td>" + dato + "</td>";
+            }
+
+            s = s + "</tr>";
+        }
+
+        document.getElementById("corpoTabella").innerHTML = s;
+    </script>
+</body>
+
+</html>
