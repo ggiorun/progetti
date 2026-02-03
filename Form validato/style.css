@@ -46,7 +46,6 @@ input[type="password"]:focus {
     border-color: #007bff;
 }
 
-/* Stile per il testo piccolo informativo */
 .info-text {
     color: #666; 
     margin-bottom: 15px; 
