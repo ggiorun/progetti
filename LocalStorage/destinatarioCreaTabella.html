@@ -51,10 +51,15 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Cognome</th>
+                <th>Indirizzo</th>
                 <th>Città</th>
+                <th>CAP</th>
                 <th>Età</th>
-                <th>Gen.</th>
+                <th>Data Nascita</th>
+                <th>Sesso</th>
+                <th>Provincia</th>
                 <th>Mezzi</th>
+                <th>Materie</th>
             </tr>
         </thead>
         <tbody id="corpoTabella">
@@ -62,49 +67,59 @@
     </table>
 
     <script>
-        s = "";
+        // Inizializzo la variabile 's' con la riga delle intestazioni (ID, Nome, ecc.)
+        var s = "<tr><th>ID</th><th>Nome</th><th>Cognome</th><th>Indirizzo</th><th>Città</th><th>CAP</th><th>Età</th><th>Data</th><th>Sesso</th><th>Provincia</th><th>Mezzi</th><th>Materie</th></tr>";
+
+        // Prendo tutta la stringa dopo il ? dall'URL della pagina
         var url = document.location.search.substring(0);
-        //chiedo al prof se l'url devo mandarlo in output con l'alert o no
+
+        // Faccio apparire un alert con l'URL per controllare i dati ricevuti
         alert(url);
 
-        var persone = JSON.parse(localStorage.getItem('personeTransmission'));
-        var params = url.split("&");
+        // Divido l'URL al carattere & e prendo il primo elemento (che contiene txtR)
+        var url1 = url.split("&")[0];
 
-        // (righe)
-        var righe = persone.length;
-        // c = numero di dati (colonne: ID, Nome, Cognome, Città, Età, Generazione, Mezzi)
-        var colonne = 7;
+        // Prendo il secondo elemento della divisione (che contiene txtC)
+        var url2 = url.split("&")[1];
 
-        for (i = 0; i < righe; i++) {
+        // Mostro in un alert i valori di txtR e txtC per debug
+        alert(url1 + "  " + url2);
+
+        // Estraggo il valore delle righe saltando la parte scritta "?txtR=" (6 caratteri)
+        var r = url1.substr(6); //riga
+
+        // Estraggo il valore delle colonne saltando la parte "txtC=" (5 caratteri)
+        var c = url2.substr(5);//colonne
+
+        // Inizio il ciclo per creare le righe (una per ogni persona inserita)
+        for (i = 1; i <= r; i++) {
+
+            // Apro il tag della riga HTML
             s = s + "<tr>";
 
-            // Recupero l'ID dal URL usando split e substr
-            var p = params[i];
-            var id = "";
-            if (i == 0) {
-                id = p.substr(4); // Rimuove "?id="
-            } else {
-                id = p.substr(3); // Rimuove "id="
-            }
+            // Inizio il ciclo per creare le 12 celle di ogni persona
+            for (j = 1; j <= c; j++) {
 
-            // Ciclo per le colonne
-            for (j = 1; j <= colonne; j++) {
-                var dato = "";
-                if (j == 1) dato = id;
-                if (j == 2) dato = persone[i].nome;
-                if (j == 3) dato = persone[i].cognome;
-                if (j == 4) dato = persone[i].indirizzo.citta;
-                if (j == 5) dato = persone[i].eta;
-                if (j == 6) dato = persone[i].generazione;
-                if (j == 7) dato = persone[i].mezziPosseduti;
+                // Calcolo la posizione esatta del parametro nell'URL
+                var idx = (i - 1) * c + j + 1;
 
-                s = s + "<td>" + dato + "</td>";
+                // Estraggo il pezzetto di URL interessato (es. 'nome=Mario')
+                var p = url.split("&")[idx];
+
+                // Prendo solo la parte dopo il simbolo = (il valore effettivo)
+                var valoreBrutto = p.splut("=")[1];
+
+                // Rimuovo i caratteri speciali dell'URL (es. %20 diventa spazio) tramite decodeURIComponent
+                var ris = decodeURIComponent(valoreBrutto);  //rimuovo i caratteri speciali
+
+                // Metto il valore pulito dentro una cella 'td' e la aggiungo alla stringa
+                s = s + "<td>" + ris + "</td>";
             }
 
             s = s + "</tr>";
         }
 
-        document.getElementById("corpoTabella").innerHTML = s;
+        document.getElementById("tabella1").innerHTML = s;
     </script>
 </body>
 

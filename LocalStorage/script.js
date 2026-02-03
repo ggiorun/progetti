@@ -1,6 +1,8 @@
 let persone = [];
-
+let id = 0;
 function stampa() {
+    id = id + 1;
+    document.getElementById("inputId").value = id;
     const nome = document.getElementById("nome").value;
     const cognome = document.getElementById("cognome").value;
     const indirizzo = document.getElementById("indirizzo").value;
@@ -71,6 +73,7 @@ function stampa() {
     }
 
     const persona = {
+        id: id,
         nome: nome,
         cognome: cognome,
         eta: eta,
@@ -103,18 +106,29 @@ function stampa() {
         "<p><strong>Materie preferite:</strong> " + persona.materiePreferite + "</p>" +
         "<p><strong>Generazione:</strong> " + persona.generazione + "</p>" +
         "<hr><p><em>Persona aggiunta alla lista! Totale persone: " + (persone.length + 1) + "</em></p>";
-    // Aggiunta all'elenco globale
     persone.push(persona);
+}
 
-    // 1. Salvataggio immediato nel localStorage
-    localStorage.setItem('personeTransmission', JSON.stringify(persone));
+function trasmettiTutto() {
+    var url = "destinatarioCreaTabella.html?txtR=" + persone.length + "&txtC=12&";
 
-    // 2. Aggiunta di un input hidden al form di trasmissione per l'indice (metodo GET)
-    const container = document.getElementById("containerInput");
-    const idValue = persone.length.toString().padStart(2, '0');
-    const hiddenInput = document.createElement("input");
-    hiddenInput.type = "hidden";
-    hiddenInput.name = "id";
-    hiddenInput.value = idValue;
-    container.appendChild(hiddenInput);
+    for (var i = 0; i < persone.length; i++) {
+        var p = persone[i];
+
+        // Aggiungiamo i parametri in ordine fisso (12 campi per persona)
+        url += "id=" + p.id + "&";
+        url += "nome=" + p.nome + "&";
+        url += "cognome=" + p.cognome + "&";
+        url += "indirizzo=" + p.indirizzo.via + "&";
+        url += "citta=" + p.indirizzo.citta + "&";
+        url += "cap=" + p.indirizzo.cap + "&";
+        url += "eta=" + p.eta + "&";
+        url += "dataNascita=" + p.dataNascita + "&";
+        url += "sesso=" + p.sesso + "&";
+        url += "provincia=" + p.provincia + "&";
+        url += "mezzi=" + p.mezziPosseduti + "&";
+        url += "materie=" + p.materiePreferite + "&";
+    }
+
+    window.location.href = url;
 }

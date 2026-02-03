@@ -108,7 +108,8 @@
 </head>
 
 <body>
-  <form id="anagraficaForm">
+  <form id="FormDiTrasmissione" action="destinatarioCreaTabella.html" method="get">
+    <input type="hidden" name="id" id="inputId">
     <h1>Anagrafica Generazionale</h1>
 
     <label for="nome">Nome</label>
@@ -175,14 +176,9 @@
 
     <button type="button" style="background: #27ae60; margin-top: 10px;" onclick="stampa()">Aggiungi Persona alla
       Lista</button>
-  </form>
-
-  <form id="FormDiTrasmissione" action="destinatarioCreaTabella.html" method="get">
-    <!--chiedo al prof-->
-    <div id="containerInput"></div>
-    <button type="submit"
-      style="background: #27ae60; margin-top: 10px; width: 100%; padding: 12px; color: white; font-size: 1rem; border: none; border-radius: 8px; cursor: pointer;">Trasmetti
-      Dati alla Tabella</button>
+    <button type="button"
+      style="background: #27ae60; margin-top: 10px; width: 100%; padding: 12px; color: white; font-size: 1rem; border: none; border-radius: 8px; cursor: pointer;"
+      onclick="trasmettiTutto()">Trasmetti Dati alla Tabella</button>
   </form>
 
   <div id="output">
