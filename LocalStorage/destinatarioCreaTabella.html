@@ -85,7 +85,7 @@
             s = s + "<tr>";
             for (j = 1; j <= c; j++) {
 
-                var idx = (i - 1) * c + j + 1;
+                var idx = (i - 1) * c + j + 1; //calcolo indice preciso
                 var p = url.split("&")[idx];
                 var valoreBrutto = p.splut("=")[1];
                 var ris = decodeURIComponent(valoreBrutto);  //rimuovo i caratteri speciali
