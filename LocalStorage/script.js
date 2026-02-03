@@ -115,7 +115,6 @@ function trasmettiTutto() {
     for (var i = 0; i < persone.length; i++) {
         var p = persone[i];
 
-        // Aggiungiamo i parametri in ordine fisso (12 campi per persona)
         url += "id=" + p.id + "&";
         url += "nome=" + p.nome + "&";
         url += "cognome=" + p.cognome + "&";
@@ -132,3 +131,4 @@ function trasmettiTutto() {
 
     window.location.href = url;
 }
+
