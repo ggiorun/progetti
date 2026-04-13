@@ -1,15 +1,15 @@
-let utenteNome = "";
-let utenteEmail = "";
+var utenteNome = "";
+var utenteEmail = "";
 
-let queryString = window.location.search;
+var queryString = window.location.search;
 if (queryString !== "") {
-    let qString = queryString.substring(1);
-    let coppie = qString.split("&");
+    var qString = queryString.substring(1);
+    var coppie = qString.split("&");
 
-    for (let k = 0; k < coppie.length; k++) {
-        let coppia = coppie[k].split("=");
-        let chiave = coppia[0];
-        let valore = coppia[1];
+    for (var k = 0; k < coppie.length; k++) {
+        var coppia = coppie[k].split("=");
+        var chiave = coppia[0];
+        var valore = coppia[1];
 
         if (chiave === "nome") {
             utenteNome = decodeURIComponent(valore);
@@ -23,51 +23,56 @@ if (queryString !== "") {
 }
 
 
-const fileInput = document.getElementById("csv-file");
-const fileNameDisplay = document.getElementById("file-name");
-const btnLoadCsv = document.getElementById("btn-load-csv");
+var fileInput = document.getElementById("csv-file");
+var fileNameDisplay = document.getElementById("file-name");
+var btnLoadCsv = document.getElementById("btn-load-csv");
 
-let prodottiPronti = [];
+var prodottiPronti = [];
 
-fileInput.addEventListener("change", function () {
-    const file = this.files[0];
+fileInput.onchange = function () {
+    var file = this.files[0];
     if (!file) return;
 
     fileNameDisplay.textContent = file.name;
     btnLoadCsv.disabled = false;
 
-    const reader = new FileReader();
+    var reader = new FileReader();
 
     reader.onload = function (e) {
-        const testo = e.target.result;
-        const dati = parseCSV(testo);
+        var testo = e.target.result;
+        var dati = parseCSV(testo);
         prodottiPronti = dati;
     };
 
     reader.readAsText(file);
-});
+};
+
+function myTrim(str) {
+    if (!str) return "";
+    return str.replace(/^\s+|\s+$/g, '');
+}
 
 function parseCSV(testo) {
-    const righe = testo.split("\n");
-    let parsedProducts = [];
+    var righe = testo.split("\n");
+    var parsedProducts = [];
 
-    const headerRow = righe[0].split(',');
-    let headers = [];
+    var headerRow = righe[0].split(',');
+    var headers = [];
     for (var h = 0; h < headerRow.length; h++) {
-        headers.push(headerRow[h].toLowerCase().trim());
+        headers.push(myTrim(headerRow[h].toLowerCase()));
     }
 
     for (var i = 1; i < righe.length; i++) {
-        if (righe[i].trim() === "") continue;
+        if (myTrim(righe[i]) === "") continue;
 
-        let row = righe[i].split(',');
-        let product = {};
+        var row = righe[i].split(',');
+        var product = {};
 
         for (var j = 0; j < headers.length; j++) {
-            let val = row[j];
+            var val = row[j];
             if (val !== undefined) {
-                val = val.trim();
-                let virgoletta = '"';
+                val = myTrim(val);
+                var virgoletta = '"';
                 if (val[0] === virgoletta && val[val.length - 1] === virgoletta) {
                     val = val.substring(1, val.length - 1);
                 }
@@ -89,15 +94,15 @@ btnLoadCsv.onclick = function () {
 };
 
 function trasmettiTuttoAlCatalogo(parsedProducts) {
-    let url = "catalogo.html?";
+    var url = "catalogo.html?";
 
     url += "nome=" + encodeURIComponent(utenteNome) + "&";
     url += "email=" + encodeURIComponent(utenteEmail) + "&";
-    for (let i = 0; i < parsedProducts.length; i++) {
-        let p = parsedProducts[i];
+    for (var i = 0; i < parsedProducts.length; i++) {
+        var p = parsedProducts[i];
 
-        for (let chiave in p) {
-            let chiaveUnificata = "prod" + i + "_" + chiave;
+        for (var chiave in p) {
+            var chiaveUnificata = "prod" + i + "_" + chiave;
             url += chiaveUnificata + "=" + encodeURIComponent(p[chiave]) + "&";
         }
     }

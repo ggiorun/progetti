@@ -1,10 +1,9 @@
-
-const regexNomeCognome = /^[a-zA-Z]+$/;
-const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var regexNomeCognome = /^[a-zA-Z]+$/;
+var regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function salvaRegistrazione() {
-    let nome = document.getElementById("reg-name").value;
-    let email = document.getElementById("reg-email").value;
+    var nome = document.getElementById("reg-name").value;
+    var email = document.getElementById("reg-email").value;
     if (nome === "" || email === "") {
         alert("Inserisci tutti i dati per registrarti!");
         return;
@@ -18,7 +17,7 @@ function salvaRegistrazione() {
         alert("Inserisci un indirizzo email valido!");
         return;
     }
-    let urlTarget = "upload.html?nome=" + encodeURIComponent(nome) +
+    var urlTarget = "upload.html?nome=" + encodeURIComponent(nome) +
         "&email=" + encodeURIComponent(email);
 
     window.location.href = urlTarget;

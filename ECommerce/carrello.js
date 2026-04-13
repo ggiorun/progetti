@@ -1,57 +1,57 @@
-let prodotti = [];
-let carrello = [];
+var prodotti = [];
+var carrello = [];
 
-let utenteNome = "";
-let utenteEmail = "";
-let totProdotti = 0;
+var utenteNome = "";
+var utenteEmail = "";
+var totProdotti = 0;
 
-let queryString = window.location.search;
-let tutteLeVariabili = [];
+var queryString = window.location.search;
+var tutteLeVariabili = [];
 
 if (queryString !== "") {
-    let qString = queryString.substring(1);
-    let coppie = qString.split("&");
-    
-    for (let k = 0; k < coppie.length; k++) {
-        let arrayTemporaneo = coppie[k].split("=");
+    var qString = queryString.substring(1);
+    var coppie = qString.split("&");
+
+    for (var k = 0; k < coppie.length; k++) {
+        var arrayTemporaneo = coppie[k].split("=");
         if (arrayTemporaneo.length > 1) {
-            let chiave = arrayTemporaneo[0];
-            let valore = decodeURIComponent(arrayTemporaneo[1]);
-            
+            var chiave = arrayTemporaneo[0];
+            var valore = decodeURIComponent(arrayTemporaneo[1]);
+
             if (chiave === "nome") { utenteNome = valore; }
             else if (chiave === "email") { utenteEmail = valore; }
             else if (chiave === "totProdotti") { totProdotti = parseInt(valore); }
             else { tutteLeVariabili.push({ k: chiave, v: valore }); }
         }
     }
-    
-    for (let i = 0; i < totProdotti; i++) {
-        let prodottoTrovato = {};
-        for (let j = 0; j < tutteLeVariabili.length; j++) {
-            let chiaveAttuale = tutteLeVariabili[j].k;
-            let valAttuale = tutteLeVariabili[j].v;
-            let prefisso = "prod" + i + "_";
-            let grandezzaPrefisso = prefisso.length;
-            
+
+    for (var i = 0; i < totProdotti; i++) {
+        var prodottoTrovato = {};
+        for (var j = 0; j < tutteLeVariabili.length; j++) {
+            var chiaveAttuale = tutteLeVariabili[j].k;
+            var valAttuale = tutteLeVariabili[j].v;
+            var prefisso = "prod" + i + "_";
+            var grandezzaPrefisso = prefisso.length;
+
             if (chiaveAttuale.substring(0, grandezzaPrefisso) === prefisso) {
-                let nomeCampoReale = chiaveAttuale.substring(grandezzaPrefisso);
+                var nomeCampoReale = chiaveAttuale.substring(grandezzaPrefisso);
                 prodottoTrovato[nomeCampoReale] = valAttuale;
             }
         }
         prodotti.push(prodottoTrovato);
     }
-    
-    let estrattoreCart = "";
-    for (let j = 0; j < tutteLeVariabili.length; j++) {
+
+    var estrattoreCart = "";
+    for (var j = 0; j < tutteLeVariabili.length; j++) {
         if (tutteLeVariabili[j].k === "cart_ids") {
             estrattoreCart = tutteLeVariabili[j].v;
         }
     }
     if (estrattoreCart !== "") {
-        let identitificatori = estrattoreCart.split(",");
-        for (let idn = 0; idn < identitificatori.length; idn++) {
-            let mioId = identitificatori[idn];
-            for (let px = 0; px < prodotti.length; px++) {
+        var identitificatori = estrattoreCart.split(",");
+        for (var idn = 0; idn < identitificatori.length; idn++) {
+            var mioId = identitificatori[idn];
+            for (var px = 0; px < prodotti.length; px++) {
                 if (prodotti[px].id === mioId) {
                     carrello.push(prodotti[px]);
                 }
@@ -62,48 +62,48 @@ if (queryString !== "") {
 }
 
 function tornaAlCatalogo() {
-    let url = "catalogo.html?";
+    var url = "catalogo.html?";
     url += "nome=" + encodeURIComponent(utenteNome) + "&";
     url += "email=" + encodeURIComponent(utenteEmail) + "&";
-    
-    for (let i = 0; i < prodotti.length; i++) {
-        let p = prodotti[i];
-        for (let chiave in p) {
-            let chiaveUnificata = "prod" + i + "_" + chiave;
+
+    for (var i = 0; i < prodotti.length; i++) {
+        var p = prodotti[i];
+        for (var chiave in p) {
+            var chiaveUnificata = "prod" + i + "_" + chiave;
             url += chiaveUnificata + "=" + encodeURIComponent(p[chiave]) + "&";
         }
     }
     url += "totProdotti=" + prodotti.length + "&";
-    
-    let idNelCarrello = [];
-    for (let c = 0; c < carrello.length; c++) {
+
+    var idNelCarrello = [];
+    for (var c = 0; c < carrello.length; c++) {
         idNelCarrello.push(carrello[c].id);
     }
-    
+
     if (idNelCarrello.length > 0) {
         url += "cart_ids=" + encodeURIComponent(idNelCarrello.join(",")) + "&";
     }
-    
+
     window.location.href = url;
 }
 
 function rimuoviDalCarrello(indice) {
-    let nuovoCarrello = [];
-    for (let i = 0; i < carrello.length; i++) {
+    var nuovoCarrello = [];
+    for (var i = 0; i < carrello.length; i++) {
         if (i !== indice) {
             nuovoCarrello.push(carrello[i]);
         }
     }
     carrello = nuovoCarrello;
-    
+
     document.getElementById("cart-count").textContent = carrello.length;
     renderCart();
 }
 
 function renderCart() {
-    let cartItemsContainer = document.getElementById("cart-items");
-    let cartSummary = document.getElementById("cart-summary");
-    
+    var cartItemsContainer = document.getElementById("cart-items");
+    var cartSummary = document.getElementById("cart-summary");
+
     if (carrello.length === 0) {
         cartItemsContainer.innerHTML = "<p>Il carrello è vuoto. Torna al catalogo e aggiungi qualche prodotto per procedere con l'acquisto.</p>";
         cartSummary.style.display = "none";
@@ -111,30 +111,30 @@ function renderCart() {
     }
 
     cartSummary.style.display = "block";
-    let total = 0;
-    
-    let htmlString = "";
+    var total = 0;
 
-    for (let i = 0; i < carrello.length; i++) {
-        let prod = carrello[i];
-        
-        let title = "Prodotto Sconosciuto";
+    var htmlString = "";
+
+    for (var i = 0; i < carrello.length; i++) {
+        var prod = carrello[i];
+
+        var title = "Prodotto Sconosciuto";
         if (prod.titolo) { title = prod.titolo; }
         else if (prod.nome) { title = prod.nome; }
 
-        let categoria = "Prodotto";
+        var categoria = "Prodotto";
         if (prod.categoria) { categoria = prod.categoria; }
 
-        let priceStr = "0";
+        var priceStr = "0";
         if (prod.prezzo) { priceStr = prod.prezzo; }
         else if (prod.price) { priceStr = prod.price; }
-        
-        let priceArr = priceStr.split(",");
+
+        var priceArr = priceStr.split(",");
         if (priceArr.length > 1) {
             priceStr = priceArr[0] + "." + priceArr[1];
         }
-        
-        let priceVal = parseFloat(priceStr);
+
+        var priceVal = parseFloat(priceStr);
         if (!priceVal) { priceVal = 0; }
         total = total + priceVal;
 
@@ -160,58 +160,58 @@ function perfezionaAcquisto() {
         return;
     }
 
-    let doc = new jsPDF();
+    var doc = new jsPDF();
     doc.setFontSize(22);
     doc.setTextColor(59, 130, 246);
     doc.text("Riepilogo Ordine - ShopPremium", 15, 20);
-    
+
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14);
     doc.text("Dati Cliente:", 15, 35);
-    
+
     doc.setFontSize(12);
     doc.text("Nome: " + utenteNome, 15, 45);
     doc.text("Email: " + utenteEmail, 15, 52);
-    
+
     doc.setFontSize(14);
     doc.text("Prodotti Acquistati:", 15, 70);
-    
+
     doc.setFontSize(11);
-    let y = 80;
-    let total = 0;
-    
-    for (let i = 0; i < carrello.length; i++) {
-        let prod = carrello[i];
-        let title = "Prodotto Sconosciuto";
+    var y = 80;
+    var total = 0;
+
+    for (var i = 0; i < carrello.length; i++) {
+        var prod = carrello[i];
+        var title = "Prodotto Sconosciuto";
         if (prod.titolo) { title = prod.titolo; }
         else if (prod.nome) { title = prod.nome; }
-        
-        let cat = "Articolo";
+
+        var cat = "Articolo";
         if (prod.categoria) { cat = prod.categoria; }
 
-        let priceStr = "0";
+        var priceStr = "0";
         if (prod.prezzo) { priceStr = prod.prezzo; }
         else if (prod.price) { priceStr = prod.price; }
-        
-        let priceArr = priceStr.split(",");
+
+        var priceArr = priceStr.split(",");
         if (priceArr.length > 1) {
             priceStr = priceArr[0] + "." + priceArr[1];
         }
-        
-        let priceVal = parseFloat(priceStr);
+
+        var priceVal = parseFloat(priceStr);
         if (!priceVal) { priceVal = 0; }
         total = total + priceVal;
 
-        let lineItem = (i + 1) + ". [" + cat.toUpperCase() + "] " + title + " - €" + priceVal;
+        var lineItem = (i + 1) + ". [" + cat.toUpperCase() + "] " + title + " - €" + priceVal;
         doc.text(lineItem, 15, y);
         y = y + 8;
-        
+
         if (y > 275) {
             doc.addPage();
             y = 20;
         }
     }
-    
+
     y = y + 10;
     doc.setFontSize(16);
     doc.setTextColor(16, 185, 129);
@@ -222,7 +222,7 @@ function perfezionaAcquisto() {
     carrello = [];
     document.getElementById("cart-count").textContent = "0";
     alert("Acquisto perfezionato con successo!");
-    
+
     tornaAlCatalogo();
 }
 
