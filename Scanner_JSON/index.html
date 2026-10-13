@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogo prodotti</title>
+
+<style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    background-color: #f1f1f1;
+    color: #333333;
+  }
+
+  #intestazione {
+    background-color: #2e7d32;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #intestazione h1 {
+    margin: 0 0 5px 0;
+    font-size: 28px;
+  }
+
+  #intestazione p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  #contenitore {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  /* Barra dei filtri */
+  #filtri {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #filtri button {
+    background-color: #ffffff;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 8px 18px;
+    margin: 3px;
+    font-size: 14px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    cursor: pointer;
+  }
+
+  #filtri button:hover {
+    background-color: #c8e6c9;
+  }
+
+  #filtri button.attivo {
+    background-color: #2e7d32;
+    color: #ffffff;
+  }
+
+  #conteggio {
+    text-align: center;
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 10px;
+  }
+
+  #messaggio {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  /* Schede dei prodotti: 4 per riga */
+  .prodotto {
+    display: inline-block;
+    vertical-align: top;
+    width: 23%;
+    margin: 1%;
+    min-height: 270px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-top: 5px solid #2e7d32;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .prodotto.nonfood {
+    border-top-color: #1565c0;
+  }
+
+  .icona {
+    font-size: 48px;
+    line-height: 60px;
+  }
+
+  .prodotto h2 {
+    font-size: 16px;
+    margin: 8px 0 4px 0;
+  }
+
+  .marca {
+    font-size: 12px;
+    color: #777777;
+    margin: 0 0 8px 0;
+  }
+
+  .descrizione {
+    font-size: 13px;
+    margin: 0 0 10px 0;
+  }
+
+  .prezzo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #b71c1c;
+    margin: 0 0 6px 0;
+  }
+
+  .disponibile {
+    color: #2e7d32;
+    font-size: 12px;
+  }
+
+  .esaurito {
+    color: #b71c1c;
+    font-size: 12px;
+  }
+
+  .etichetta {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #ffffff;
+    background-color: #2e7d32;
+    margin-bottom: 4px;
+  }
+
+  .nonfood .etichetta {
+    background-color: #1565c0;
+  }
+
+  #piede {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: #777777;
+  }
+
+  /* Tablet: 2 schede per riga */
+  @media screen and (max-width: 900px) {
+    .prodotto {
+      width: 48%;
+      min-height: 0;
+    }
+  }
+
+  /* Smartphone: 1 scheda per riga */
+  @media screen and (max-width: 520px) {
+    .prodotto {
+      width: 98%;
+    }
+
+    #intestazione h1 {
+      font-size: 22px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="intestazione">
+  <h1>Catalogo prodotti</h1>
+  <p id="nomeNegozio">Caricamento in corso...</p>
+</div>
+
+<div id="contenitore">
+
+  <div id="filtri">
+    <button type="button" id="btn-tutti" class="attivo" onclick="mostraProdotti('Tutti')">Tutti</button>
+    <button type="button" id="btn-food" onclick="mostraProdotti('Food')">Food</button>
+    <button type="button" id="btn-nonfood" onclick="mostraProdotti('Non food')">Non food</button>
+  </div>
+
+  <div id="conteggio"></div>
+
+  <div id="messaggio">Caricamento dei prodotti...</div>
+
+  <div id="catalogo"></div>
+
+</div>
+
+<div id="piede">
+  Dati letti dal file prodotti.json con XMLHttpRequest
+</div>
+
+<script type="text/javascript">
+
+  // Variabile globale che conterra' l'elenco dei prodotti
+  var elencoProdotti = [];
+
+  // Formatta un numero come prezzo: 8.9 diventa "8,90 &euro;"
+  function formattaPrezzo(numero) {
+    return numero.toFixed(2).replace(".", ",") + " &euro;";
+  }
+
+  // Costruisce l'HTML di una singola scheda prodotto
+  function creaScheda(p) {
+    var classe = "prodotto";
+    var stato = "";
+
+    if (p.categoria == "Non food") {
+      classe = classe + " nonfood";
+    }
+
+    if (p.disponibile == true) {
+      stato = "<span class=\"disponibile\">Disponibile</span>";
+    } else {
+      stato = "<span class=\"esaurito\">Non disponibile</span>";
+    }
+
+    var html = "";
+    html = html + "<div class=\"" + classe + "\">";
+    html = html + "<div class=\"icona\">" + p.icona + "</div>";
+    html = html + "<span class=\"etichetta\">" + p.categoria + "</span>";
+    html = html + "<h2>" + p.nome + "</h2>";
+    html = html + "<p class=\"marca\">" + p.marca + " - cod. " + p.codice + "</p>";
+    html = html + "<p class=\"descrizione\">" + p.descrizione + "</p>";
+    html = html + "<p class=\"prezzo\">" + formattaPrezzo(p.prezzo) + "</p>";
+    html = html + stato;
+    html = html + "</div>";
+    return html;
+  }
+
+  // Mostra i prodotti della categoria scelta (Tutti, Food, Non food)
+  function mostraProdotti(categoria) {
+    var testo = "";
+    var contatore = 0;
+    var i;
+
+    for (i = 0; i < elencoProdotti.length; i++) {
+      if (categoria == "Tutti" || elencoProdotti[i].categoria == categoria) {
+        testo = testo + creaScheda(elencoProdotti[i]);
+        contatore = contatore + 1;
+      }
+    }
+
+    document.getElementById("catalogo").innerHTML = testo;
+    document.getElementById("conteggio").innerHTML = "Prodotti visualizzati: " + contatore;
+    document.getElementById("messaggio").style.display = "none";
+
+    // Aggiorna il pulsante evidenziato
+    document.getElementById("btn-tutti").className = "";
+    document.getElementById("btn-food").className = "";
+    document.getElementById("btn-nonfood").className = "";
+
+    if (categoria == "Tutti") {
+      document.getElementById("btn-tutti").className = "attivo";
+    } else if (categoria == "Food") {
+      document.getElementById("btn-food").className = "attivo";
+    } else {
+      document.getElementById("btn-nonfood").className = "attivo";
+    }
+  }
+
+  // Mostra un messaggio di errore al posto del catalogo
+  function mostraErrore(testo) {
+    document.getElementById("messaggio").style.display = "block";
+    document.getElementById("messaggio").innerHTML = testo;
+    document.getElementById("nomeNegozio").innerHTML = "";
+  }
+
+  // Legge il file JSON con XMLHttpRequest
+  function caricaProdotti() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+          var dati;
+
+          try {
+            // responseText e' una stringa: JSON.parse la trasforma in oggetto
+            dati = JSON.parse(xhr.responseText);
+          } catch (errore) {
+            mostraErrore("Il file prodotti.json non e' scritto correttamente.");
+            return;
+          }
+
+          elencoProdotti = dati.prodotti;
+          document.getElementById("nomeNegozio").innerHTML = dati.negozio;
+          mostraProdotti("Tutti");
+        } else if (xhr.status != 0) {
+          mostraErrore("Errore nel caricamento: " + xhr.status + " " + xhr.statusText);
+        }
+      }
+    };
+
+    xhr.onerror = function() {
+      mostraErrore("Errore nella richiesta. Apri la pagina tramite un server web (non con doppio clic sul file).");
+    };
+
+    xhr.open("GET", "prodotti.json", true);
+    xhr.send();
+  }
+
+  // Avvia il caricamento quando la pagina e' pronta
+  window.onload = caricaProdotti;
+
+</script>
+
+</body>
+</html>

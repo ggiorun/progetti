@@ -1,0 +1,125 @@
+{
+  "negozio": "Mini Market Online",
+  "prodotti": [
+    {
+      "codice": "F001",
+      "nome": "Pasta di semola 500 g",
+      "categoria": "Food",
+      "marca": "Pasta Nostrana",
+      "descrizione": "Spaghetti trafilati al bronzo, ottimi con il sugo al pomodoro.",
+      "prezzo": 1.29,
+      "disponibile": true,
+      "icona": "🍝"
+    },
+    {
+      "codice": "F002",
+      "nome": "Olio extravergine di oliva 1 l",
+      "categoria": "Food",
+      "marca": "Frantoio del Sole",
+      "descrizione": "Olio italiano spremuto a freddo, ideale per condire a crudo.",
+      "prezzo": 8.90,
+      "disponibile": true,
+      "icona": "🫒"
+    },
+    {
+      "codice": "F003",
+      "nome": "Latte intero 1 l",
+      "categoria": "Food",
+      "marca": "Cascina Verde",
+      "descrizione": "Latte fresco intero pastorizzato, da conservare in frigorifero.",
+      "prezzo": 1.65,
+      "disponibile": true,
+      "icona": "🥛"
+    },
+    {
+      "codice": "F004",
+      "nome": "Biscotti frollini 350 g",
+      "categoria": "Food",
+      "marca": "Dolce Forno",
+      "descrizione": "Frollini al burro per la colazione e la merenda.",
+      "prezzo": 2.10,
+      "disponibile": false,
+      "icona": "🍪"
+    },
+    {
+      "codice": "F005",
+      "nome": "Passata di pomodoro 700 g",
+      "categoria": "Food",
+      "marca": "Orto Italiano",
+      "descrizione": "Passata di pomodori maturati al sole, senza conservanti.",
+      "prezzo": 1.45,
+      "disponibile": true,
+      "icona": "🍅"
+    },
+    {
+      "codice": "F006",
+      "nome": "Succo di arancia 1 l",
+      "categoria": "Food",
+      "marca": "Frutta Viva",
+      "descrizione": "Succo 100% arancia, senza zuccheri aggiunti.",
+      "prezzo": 2.35,
+      "disponibile": true,
+      "icona": "🍊"
+    },
+    {
+      "codice": "N001",
+      "nome": "Detersivo per piatti 750 ml",
+      "categoria": "Non food",
+      "marca": "Casa Pulita",
+      "descrizione": "Detersivo concentrato al limone, sgrassa anche con acqua fredda.",
+      "prezzo": 1.99,
+      "disponibile": true,
+      "icona": "🧴"
+    },
+    {
+      "codice": "N002",
+      "nome": "Carta igienica 12 rotoli",
+      "categoria": "Non food",
+      "marca": "Morbidella",
+      "descrizione": "Carta a tre veli, morbida e resistente.",
+      "prezzo": 4.80,
+      "disponibile": true,
+      "icona": "🧻"
+    },
+    {
+      "codice": "N003",
+      "nome": "Quaderno a quadretti A4",
+      "categoria": "Non food",
+      "marca": "Scuola Facile",
+      "descrizione": "Quaderno con copertina rigida, 80 pagine a quadretti da 5 mm.",
+      "prezzo": 2.50,
+      "disponibile": true,
+      "icona": "📓"
+    },
+    {
+      "codice": "N004",
+      "nome": "Penne a sfera blu (conf. da 10)",
+      "categoria": "Non food",
+      "marca": "Scrivi Bene",
+      "descrizione": "Confezione da 10 penne con inchiostro blu a scorrimento fluido.",
+      "prezzo": 3.20,
+      "disponibile": false,
+      "icona": "🖊️"
+    },
+    {
+      "codice": "N005",
+      "nome": "Lampadina LED E27 10 W",
+      "categoria": "Non food",
+      "marca": "Luce Chiara",
+      "descrizione": "Lampadina a risparmio energetico con luce calda.",
+      "prezzo": 3.90,
+      "disponibile": true,
+      "icona": "💡"
+    },
+    {
+      "codice": "N006",
+      "nome": "Spugne abrasive (conf. da 5)",
+      "categoria": "Non food",
+      "marca": "Casa Pulita",
+      "descrizione": "Spugne per la pulizia di pentole e stoviglie.",
+      "prezzo": 1.50,
+      "disponibile": true,
+      "icona": "🧽"
+    }
+  ]
+}
