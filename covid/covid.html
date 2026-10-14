@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andamento nazionale COVID-19</title>
+
+<style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: #f1f1f1;
+    color: #333333;
+  }
+
+  #intestazione {
+    background-color: #1565c0;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #intestazione h1 {
+    margin: 0 0 5px 0;
+    font-size: 26px;
+  }
+
+  #intestazione p {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  #contenitore {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  /* Barra dei controlli */
+  #controlli {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #controlli label {
+    margin: 0 5px 0 10px;
+    font-size: 13px;
+  }
+
+  #controlli select {
+    padding: 6px;
+    font-size: 14px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    margin-bottom: 5px;
+  }
+
+  #conteggio {
+    text-align: center;
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 10px;
+  }
+
+  #messaggio {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  /* Il contenitore della tabella scorre se lo schermo e' stretto */
+  #areaTabella {
+    max-height: 600px;
+    overflow: auto;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th {
+    background-color: #1565c0;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 8px 6px;
+    text-align: right;
+    border: 1px solid #0d47a1;
+    position: sticky;
+    top: 0;
+  }
+
+  td {
+    padding: 6px;
+    text-align: right;
+    border: 1px solid #dddddd;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  th.data, td.data {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f5f9ff;
+  }
+
+  tr:hover {
+    background-color: #e3f2fd;
+  }
+
+  td.negativo {
+    color: #2e7d32;
+  }
+
+  td.positivo {
+    color: #b71c1c;
+  }
+
+  #piede {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: #777777;
+  }
+
+  /* Schermi stretti: nascondo le colonne meno importanti */
+  @media screen and (max-width: 800px) {
+    .secondaria {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    #intestazione h1 {
+      font-size: 20px;
+    }
+
+    #controlli label {
+      display: block;
+      margin: 5px 0 2px 0;
+    }
+
+    th, td {
+      font-size: 11px;
+      padding: 5px 3px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="intestazione">
+  <h1>Andamento nazionale COVID-19</h1>
+  <p>Dati del Dipartimento della Protezione Civile, divisi per data</p>
+</div>
+
+<div id="contenitore">
+
+  <div id="controlli">
+    <label for="selAnno">Anno:</label>
+    <select id="selAnno" onchange="mostraTabella()">
+      <option value="Tutti">Tutti</option>
+    </select>
+
+    <label for="selOrdine">Ordine:</label>
+    <select id="selOrdine" onchange="mostraTabella()">
+      <option value="crescente">Dal piu' vecchio al piu' recente</option>
+      <option value="decrescente">Dal piu' recente al piu' vecchio</option>
+    </select>
+  </div>
+
+  <div id="conteggio"></div>
+
+  <div id="messaggio">Caricamento dei dati in corso (il file pesa circa 1,4 MB)...</div>
+
+  <div id="areaTabella" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th class="data">Data</th>
+          <th>Ricoverati con sintomi</th>
+          <th>Terapia intensiva</th>
+          <th class="secondaria">Totale ospedalizzati</th>
+          <th class="secondaria">Isolamento domiciliare</th>
+          <th>Totale positivi</th>
+          <th class="secondaria">Variazione positivi</th>
+          <th>Nuovi positivi</th>
+          <th class="secondaria">Dimessi guariti</th>
+          <th>Deceduti</th>
+          <th>Totale casi</th>
+          <th class="secondaria">Tamponi</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabella">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div id="piede">
+  Fonte: github.com/pcm-dpc/COVID-19 - file letto con XMLHttpRequest
+</div>
+
+<script type="text/javascript">
+
+  // Indirizzo del file JSON remoto
+  var indirizzo = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
+
+  // Variabile globale: qui finiranno tutti i record (uno per giorno)
+  var elencoDati = [];
+
+  // "2020-02-24T18:00:00" diventa "24/02/2020"
+  function formattaData(testo) {
+    return testo.substring(8, 10) + "/" + testo.substring(5, 7) + "/" + testo.substring(0, 4);
+  }
+
+  // 1234567 diventa "1.234.567"; se manca il valore scrive "-"
+  function formattaNumero(numero) {
+    if (numero === null || numero === undefined) {
+      return "-";
+    }
+    return String(numero).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  // Crea una cella <td> con una classe facoltativa
+  function creaCella(valore, classe) {
+    var attributo = "";
+    if (classe != "") {
+      attributo = " class=\"" + classe + "\"";
+    }
+    return "<td" + attributo + ">" + valore + "</td>";
+  }
+
+  // Crea la riga della tabella per un giorno
+  function creaRiga(r) {
+    var classeVariazione = "";
+
+    if (r.variazione_totale_positivi < 0) {
+      classeVariazione = "negativo";
+    } else if (r.variazione_totale_positivi > 0) {
+      classeVariazione = "positivo";
+    }
+
+    var html = "<tr>";
+    html = html + creaCella(formattaData(r.data), "data");
+    html = html + creaCella(formattaNumero(r.ricoverati_con_sintomi), "");
+    html = html + creaCella(formattaNumero(r.terapia_intensiva), "");
+    html = html + creaCella(formattaNumero(r.totale_ospedalizzati), "secondaria");
+    html = html + creaCella(formattaNumero(r.isolamento_domiciliare), "secondaria");
+    html = html + creaCella(formattaNumero(r.totale_positivi), "");
+    html = html + creaCella(formattaNumero(r.variazione_totale_positivi), "secondaria " + classeVariazione);
+    html = html + creaCella(formattaNumero(r.nuovi_positivi), "");
+    html = html + creaCella(formattaNumero(r.dimessi_guariti), "secondaria");
+    html = html + creaCella(formattaNumero(r.deceduti), "");
+    html = html + creaCella(formattaNumero(r.totale_casi), "");
+    html = html + creaCella(formattaNumero(r.tamponi), "secondaria");
+    html = html + "</tr>";
+    return html;
+  }
+
+  // Riempie il menu degli anni con quelli presenti nei dati
+  function riempiAnni() {
+    var anni = {};
+    var elencoAnni = [];
+    var i;
+    var anno;
+    var select = document.getElementById("selAnno");
+
+    for (i = 0; i < elencoDati.length; i++) {
+      anno = elencoDati[i].data.substring(0, 4);
+      anni[anno] = true;
+    }
+
+    for (anno in anni) {
+      elencoAnni.push(anno);
+    }
+    elencoAnni.sort();
+
+    for (i = 0; i < elencoAnni.length; i++) {
+      var opzione = document.createElement("option");
+      opzione.value = elencoAnni[i];
+      opzione.text = elencoAnni[i];
+      select.options[select.options.length] = opzione;
+    }
+  }
+
+  // Costruisce la tabella in base ai filtri scelti
+  function mostraTabella() {
+    var annoScelto = document.getElementById("selAnno").value;
+    var ordine = document.getElementById("selOrdine").value;
+    var testo = "";
+    var contatore = 0;
+    var primaData = "";
+    var ultimaData = "";
+    var i;
+    var record;
+
+    if (ordine == "crescente") {
+      for (i = 0; i < elencoDati.length; i++) {
+        record = elencoDati[i];
+        if (annoScelto == "Tutti" || record.data.substring(0, 4) == annoScelto) {
+          testo = testo + creaRiga(record);
+          contatore = contatore + 1;
+        }
+      }
+    } else {
+      for (i = elencoDati.length - 1; i >= 0; i--) {
+        record = elencoDati[i];
+        if (annoScelto == "Tutti" || record.data.substring(0, 4) == annoScelto) {
+          testo = testo + creaRiga(record);
+          contatore = contatore + 1;
+        }
+      }
+    }
+
+    document.getElementById("corpoTabella").innerHTML = testo;
+    document.getElementById("conteggio").innerHTML = "Giorni visualizzati: " + formattaNumero(contatore);
+    document.getElementById("messaggio").style.display = "none";
+    document.getElementById("areaTabella").style.display = "block";
+  }
+
+  // Mostra un messaggio di errore al posto della tabella
+  function mostraErrore(testo) {
+    document.getElementById("messaggio").style.display = "block";
+    document.getElementById("messaggio").innerHTML = testo;
+    document.getElementById("areaTabella").style.display = "none";
+  }
+
+  // Legge il file JSON con XMLHttpRequest
+  function caricaDati() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+          try {
+            // Il file e' un array di oggetti: JSON.parse lo converte
+            elencoDati = JSON.parse(xhr.responseText);
+          } catch (errore) {
+            mostraErrore("Il file JSON ricevuto non e' valido.");
+            return;
+          }
+
+          riempiAnni();
+          mostraTabella();
+        } else if (xhr.status != 0) {
+          mostraErrore("Errore nel caricamento: " + xhr.status + " " + xhr.statusText);
+        }
+      }
+    };
+
+    xhr.onerror = function() {
+      mostraErrore("Errore nella richiesta. Controlla la connessione a Internet.");
+    };
+
+    xhr.open("GET", indirizzo, true);
+    xhr.send();
+  }
+
+  // Avvia il caricamento quando la pagina e' pronta
+  window.onload = caricaDati;
+
+</script>
+
+</body>
+</html>
