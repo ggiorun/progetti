@@ -38,7 +38,6 @@
     padding: 15px;
   }
 
-  /* Barra dei filtri */
   #filtri {
     text-align: center;
     margin-bottom: 10px;
@@ -77,7 +76,6 @@
     font-size: 16px;
   }
 
-  /* Schede dei prodotti: 4 per riga */
   .prodotto {
     display: inline-block;
     vertical-align: top;
@@ -156,7 +154,6 @@
     color: #777777;
   }
 
-  /* Tablet: 2 schede per riga */
   @media screen and (max-width: 900px) {
     .prodotto {
       width: 48%;
@@ -164,7 +161,6 @@
     }
   }
 
-  /* Smartphone: 1 scheda per riga */
   @media screen and (max-width: 520px) {
     .prodotto {
       width: 98%;
@@ -206,15 +202,12 @@
 
 <script type="text/javascript">
 
-  // Variabile globale che conterra' l'elenco dei prodotti
   var elencoProdotti = [];
 
-  // Formatta un numero come prezzo: 8.9 diventa "8,90 &euro;"
   function formattaPrezzo(numero) {
     return numero.toFixed(2).replace(".", ",") + " &euro;";
   }
 
-  // Costruisce l'HTML di una singola scheda prodotto
   function creaScheda(p) {
     var classe = "prodotto";
     var stato = "";
@@ -242,7 +235,6 @@
     return html;
   }
 
-  // Mostra i prodotti della categoria scelta (Tutti, Food, Non food)
   function mostraProdotti(categoria) {
     var testo = "";
     var contatore = 0;
@@ -259,7 +251,6 @@
     document.getElementById("conteggio").innerHTML = "Prodotti visualizzati: " + contatore;
     document.getElementById("messaggio").style.display = "none";
 
-    // Aggiorna il pulsante evidenziato
     document.getElementById("btn-tutti").className = "";
     document.getElementById("btn-food").className = "";
     document.getElementById("btn-nonfood").className = "";
@@ -273,14 +264,12 @@
     }
   }
 
-  // Mostra un messaggio di errore al posto del catalogo
   function mostraErrore(testo) {
     document.getElementById("messaggio").style.display = "block";
     document.getElementById("messaggio").innerHTML = testo;
     document.getElementById("nomeNegozio").innerHTML = "";
   }
 
-  // Legge il file JSON con XMLHttpRequest
   function caricaProdotti() {
     var xhr = new XMLHttpRequest();
 
@@ -290,7 +279,7 @@
           var dati;
 
           try {
-            // responseText e' una stringa: JSON.parse la trasforma in oggetto
+
             dati = JSON.parse(xhr.responseText);
           } catch (errore) {
             mostraErrore("Il file prodotti.json non e' scritto correttamente.");
@@ -314,7 +303,6 @@
     xhr.send();
   }
 
-  // Avvia il caricamento quando la pagina e' pronta
   window.onload = caricaProdotti;
 
 </script>
