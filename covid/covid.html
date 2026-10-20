@@ -38,7 +38,6 @@
     padding: 15px;
   }
 
-  /* Barra dei controlli */
   #controlli {
     text-align: center;
     margin-bottom: 10px;
@@ -69,7 +68,6 @@
     font-size: 16px;
   }
 
-  /* Il contenitore della tabella scorre se lo schermo e' stretto */
   #areaTabella {
     max-height: 600px;
     overflow: auto;
@@ -129,7 +127,6 @@
     color: #777777;
   }
 
-  /* Schermi stretti: nascondo le colonne meno importanti */
   @media screen and (max-width: 800px) {
     .secondaria {
       display: none;
@@ -211,18 +208,14 @@
 
 <script type="text/javascript">
 
-  // Indirizzo del file JSON remoto
   var indirizzo = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
 
-  // Variabile globale: qui finiranno tutti i record (uno per giorno)
   var elencoDati = [];
 
-  // "2020-02-24T18:00:00" diventa "24/02/2020"
   function formattaData(testo) {
     return testo.substring(8, 10) + "/" + testo.substring(5, 7) + "/" + testo.substring(0, 4);
   }
 
-  // 1234567 diventa "1.234.567"; se manca il valore scrive "-"
   function formattaNumero(numero) {
     if (numero === null || numero === undefined) {
       return "-";
@@ -230,7 +223,6 @@
     return String(numero).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
-  // Crea una cella <td> con una classe facoltativa
   function creaCella(valore, classe) {
     var attributo = "";
     if (classe != "") {
@@ -239,7 +231,6 @@
     return "<td" + attributo + ">" + valore + "</td>";
   }
 
-  // Crea la riga della tabella per un giorno
   function creaRiga(r) {
     var classeVariazione = "";
 
@@ -266,7 +257,6 @@
     return html;
   }
 
-  // Riempie il menu degli anni con quelli presenti nei dati
   function riempiAnni() {
     var anni = {};
     var elencoAnni = [];
@@ -292,14 +282,11 @@
     }
   }
 
-  // Costruisce la tabella in base ai filtri scelti
   function mostraTabella() {
     var annoScelto = document.getElementById("selAnno").value;
     var ordine = document.getElementById("selOrdine").value;
     var testo = "";
     var contatore = 0;
-    var primaData = "";
-    var ultimaData = "";
     var i;
     var record;
 
@@ -327,14 +314,12 @@
     document.getElementById("areaTabella").style.display = "block";
   }
 
-  // Mostra un messaggio di errore al posto della tabella
   function mostraErrore(testo) {
     document.getElementById("messaggio").style.display = "block";
     document.getElementById("messaggio").innerHTML = testo;
     document.getElementById("areaTabella").style.display = "none";
   }
 
-  // Legge il file JSON con XMLHttpRequest
   function caricaDati() {
     var xhr = new XMLHttpRequest();
 
@@ -342,7 +327,6 @@
       if (xhr.readyState == 4) {
         if (xhr.status == 200) {
           try {
-            // Il file e' un array di oggetti: JSON.parse lo converte
             elencoDati = JSON.parse(xhr.responseText);
           } catch (errore) {
             mostraErrore("Il file JSON ricevuto non e' valido.");
@@ -365,7 +349,6 @@
     xhr.send();
   }
 
-  // Avvia il caricamento quando la pagina e' pronta
   window.onload = caricaDati;
 
 </script>
