@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================ -->
+<!-- FILE DEI DATI: anagrafica della classe                         -->
+<!-- Questo file contiene SOLO i dati, cioe' le informazioni sulle   -->
+<!-- persone. Non dice come devono essere mostrate: di questo si     -->
+<!-- occupa la pagina "anagrafica.html".                            -->
+<!-- ============================================================ -->
+
+<!-- <classe> e' la RADICE: il tag unico che racchiude tutto il resto -->
+<classe>
+
+  <!-- Ogni <utente> e' una persona della classe.
+       Ogni persona diventera' una RIGA della tabella. -->
+  <utente>
+    <!-- Ogni dato e' scritto tra un tag di apertura e uno di chiusura.
+         Ogni dato diventera' una CELLA della tabella. -->
+    <nome>Pino</nome>
+    <cognome>Rossi</cognome>
+    <nascita>12/03/2008</nascita>
+    <citta>Milano</citta>
+  </utente>
+
+  <!-- Seconda persona -->
+  <utente>
+    <nome>Nino</nome>
+    <cognome>Del Fabbro</cognome>
+    <nascita>25/07/2008</nascita>
+    <citta>Monza</citta>
+  </utente>
+
+  <!-- Terza persona -->
+  <utente>
+    <nome>Eolo</nome>
+    <cognome>Vento</cognome>
+    <nascita>03/11/2007</nascita>
+    <citta>Bergamo</citta>
+  </utente>
+
+  <!-- Quarta persona -->
+  <utente>
+    <nome>Gino</nome>
+    <cognome>Bianchi</cognome>
+    <nascita>19/01/2008</nascita>
+    <citta>Como</citta>
+  </utente>
+
+  <!-- Quinta persona -->
+  <utente>
+    <nome>Lia</nome>
+    <cognome>Verdi</cognome>
+    <nascita>08/09/2008</nascita>
+    <citta>Lecco</citta>
+  </utente>
+
+  <!-- Sesta persona -->
+  <utente>
+    <nome>Sara</nome>
+    <cognome>Neri</cognome>
+    <nascita>30/05/2007</nascita>
+    <citta>Varese</citta>
+  </utente>
+
+</classe>
+<!-- Attenzione: XML distingue maiuscole e minuscole (case sensitive),
+     quindi <nome> e <Nome> sarebbero due tag diversi! Inoltre ogni tag
+     aperto deve essere chiuso. -->

@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>Anagrafica della classe</title>
+    <style>
+      body {
+        font-family: Arial;
+        font-size: 12pt;
+        background-color: #eeeeee;
+      }
+      .titolo {
+        font-weight: bold;
+        padding: 4px;
+      }
+      table {
+        width: 600px;
+        border-collapse: collapse;
+        font-family: Arial;
+        font-size: 12pt;
+      }
+      th {
+        background-color: teal;
+        color: white;
+        text-align: left;
+        padding: 4px;
+      }
+      td {
+        background-color: white;
+        padding: 4px;
+        border-bottom: 1px solid teal;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="titolo">Anagrafica della classe</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Data di nascita</th>
+          <th>Citt&#224;</th>
+        </tr>
+      </thead>
+      <tbody id="testo"></tbody>
+    </table>
+
+
+    <script>
+
+      var filehttp = new XMLHttpRequest();
+
+      filehttp.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+          myFunction(this);
+        }
+      };
+
+      filehttp.open("GET", "anagrafica.xml", true);
+
+      filehttp.send();
+
+      function leggi(persona, nometag) {
+        return persona.getElementsByTagName(nometag)[0].childNodes[0].nodeValue;
+      }
+
+      function myFunction(file) {
+
+        var xmlDoc;
+
+        xmlDoc = file.responseXML;
+
+
+        var utenti;
+        utenti = xmlDoc.getElementsByTagName("utente");
+
+        var righe;
+        righe = "";
+        var i;
+
+        for (i = 0; i < utenti.length; i++) {
+
+          righe = righe + "<tr>";
+
+          righe = righe + "<td>" + leggi(utenti[i], "nome") + "</td>";
+          righe = righe + "<td>" + leggi(utenti[i], "cognome") + "</td>";
+          righe = righe + "<td>" + leggi(utenti[i], "nascita") + "</td>";
+          righe = righe + "<td>" + leggi(utenti[i], "citta") + "</td>";
+
+          righe = righe + "</tr>";
+        }
+
+        document.getElementById("testo").innerHTML = righe;
+      }
+    </script>
+  </body>
+</html>
